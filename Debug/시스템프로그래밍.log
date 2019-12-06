@@ -1,0 +1,6 @@
+﻿  2018038032.cpp
+c:\users\김예원\source\repos\시스템프로그래밍\시스템프로그래밍\2018038032.cpp(48): warning C4101: 'intermediate' :참조되지 않은 지역 변수입니다.
+c:\users\김예원\source\repos\시스템프로그래밍\시스템프로그래밍\2018038032.cpp(49): warning C4101: 'ObjectProgram' :참조되지 않은 지역 변수입니다.
+c:\users\김예원\source\repos\시스템프로그래밍\시스템프로그래밍\2018038032.cpp(402): warning C4996: 'itoa': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _itoa. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.17763.0\ucrt\stdlib.h(1323): note: 'itoa' 선언을 참조하십시오.
+  시스템프로그래밍.vcxproj -> C:\Users\김예원\source\repos\시스템프로그래밍\Debug\시스템프로그래밍.exe
