@@ -1,7 +1,7 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include <cstdio>
-//#include <ctype.h>	//
-//#include <stdlib.h>	//
+#include <ctype.h>	
+#include <stdlib.h>	
 #include <string>
 #include <math.h>
 using namespace std;
@@ -54,11 +54,7 @@ int main() {
 	OPTAB(); //기계어로 번역
 	PASS1(SourceCode);
 	PASS2();
-	printf("\n\n******Symbol Table******\n");
-	for (int i = 0; i < countSym; i++) {
-		printf("%s\t\t%X\n", sym[i].label, sym[i].address);
-	}
-
+	printf("완료");
 }
 
 void OPTAB() { //OPTable
