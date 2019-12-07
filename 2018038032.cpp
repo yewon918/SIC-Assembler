@@ -25,16 +25,16 @@ typedef struct {
 
 OPTABLE OP[100];
 SymTab sym[100];
-int symIndex; //Ã£´Â symbolÀÇ ÀÎµ¦½º¸¦ ÀúÀå
-int errorflag=0; //¿¡·¯ ¹ß»ıÀ» ÀúÀå
-int countSym = 0; //½Éº¼ÀÇ °³¼ö¸¦ ÀúÀå
-int OPpos = 0; //Ã£´Â opcodeÀÇ À§Ä¡¸¦ ÀúÀå
-int saveLOCCTR; //intermediateÆÄÀÏÀÇ LOCCTRÀ» ÀúÀå
+int symIndex; //ì°¾ëŠ” symbolì˜ ì¸ë±ìŠ¤ë¥¼ ì €ì¥
+int errorflag=0; //ì—ëŸ¬ ë°œìƒì„ ì €ì¥
+int countSym = 0; //ì‹¬ë³¼ì˜ ê°œìˆ˜ë¥¼ ì €ì¥
+int OPpos = 0; //ì°¾ëŠ” opcodeì˜ ìœ„ì¹˜ë¥¼ ì €ì¥
+int saveLOCCTR; //intermediateíŒŒì¼ì˜ LOCCTRì„ ì €ì¥
 int programlength; //program length
 
-void OPTAB(); //OPTABLEÀ» »ı¼º
+void OPTAB(); //OPTABLEì„ ìƒì„±
 void PASS1(FILE* SourceCode);	//pass1
-LINE Tokenize(char* read);	//pass1- source code¿¡¼­ ÇÑÁÙÀ» ÀĞ°í ³ª´©´Â ¿ªÇÒ
+LINE Tokenize(char* read);	//pass1- source codeì—ì„œ í•œì¤„ì„ ì½ê³  ë‚˜ëˆ„ëŠ” ì—­í• 
 bool SearchSymtab(char* label);
 void InserttoSym(char *label, int LOCCTR);
 bool searchOPTAB(char *opcode);
@@ -48,13 +48,13 @@ int main() {
 
 	SourceCode = fopen("SourceCode.txt", "r");
 	if (SourceCode == NULL) {
-		printf("ÆÄÀÏ ¿À·ù");
+		printf("íŒŒì¼ ì˜¤ë¥˜");
 		exit(1);
 	}
-	OPTAB(); //±â°è¾î·Î ¹ø¿ª
+	OPTAB(); //ê¸°ê³„ì–´ë¡œ ë²ˆì—­
 	PASS1(SourceCode);
 	PASS2();
-	printf("¿Ï·á");
+	printf("ì™„ë£Œ");
 }
 
 void OPTAB() { //OPTable
@@ -124,22 +124,22 @@ void PASS1(FILE* SourceCode) { //pass1
 	FILE* intermediate;
 
 	int LOCCTR;
-	int StartAddress; //½ÃÀÛ ÁÖ¼Ò¸¦ ÀúÀåÇÑ´Ù
-	char line[500] = "";	//SourceProgramÀ» ÇÑÁÙ ÀĞÀ½
+	int StartAddress; //ì‹œì‘ ì£¼ì†Œë¥¼ ì €ì¥í•œë‹¤
+	char line[500] = "";	//SourceProgramì„ í•œì¤„ ì½ìŒ
 	LINE linecode = { 0 };
 
-	intermediate = fopen("intermediate.txt", "w"); //intermediateÆÄÀÏ »ı¼º
+	intermediate = fopen("intermediate.txt", "w"); //intermediateíŒŒì¼ ìƒì„±
 	if (intermediate == NULL) {
-		printf("¿À·ù");
+		printf("ì˜¤ë¥˜");
 		exit(1);
 	}
-	fgets(line, 500, SourceCode); //Sourceprogram¿¡¼­ ÇÑ ÁÙÀ» ÀĞ´Â´Ù
+	fgets(line, 500, SourceCode); //Sourceprogramì—ì„œ í•œ ì¤„ì„ ì½ëŠ”ë‹¤
 	//read first input line
 	linecode = Tokenize(line);
 
 	if (strcmp(linecode.opcode, "START") == 0) { //if OPCODE = 'START' then
-		StartAddress = strtol(linecode.operand, NULL, 16); //16Áø¼ö¸¦ 10Áø¼ö·Î
-		//startaddress¿¡ 10Áø¼ö ÀúÀå
+		StartAddress = strtol(linecode.operand, NULL, 16); //16ì§„ìˆ˜ë¥¼ 10ì§„ìˆ˜ë¡œ
+		//startaddressì— 10ì§„ìˆ˜ ì €ì¥
 		//save #[operand] as starting address
 		LOCCTR = StartAddress;
 		//initialize LOCCTR to Starting address
@@ -154,8 +154,8 @@ void PASS1(FILE* SourceCode) { //pass1
 	}
 
 	while (strcmp(linecode.opcode, "END") != 0) { //while OPCODE <> 'END' do
-		saveLOCCTR = LOCCTR; //ÇöÀç LOCCTRÀ» ÀúÀå
-		if (strcmp(linecode.label, ".") != 0) { //if this is not a comment line - ÁÖ¼®ÀÌ ¾Æ´Ï¶ó¸é
+		saveLOCCTR = LOCCTR; //í˜„ì¬ LOCCTRì„ ì €ì¥
+		if (strcmp(linecode.label, ".") != 0) { //if this is not a comment line - ì£¼ì„ì´ ì•„ë‹ˆë¼ë©´
 			if (strcmp(linecode.label, "\t") != 0) { //if there is a symbol in the LABEL field then
 				if (SearchSymtab(linecode.label) == true) { //search SYMTAB for LABEL
 					errorflag++;
@@ -165,7 +165,7 @@ void PASS1(FILE* SourceCode) { //pass1
 				else
 					InserttoSym(linecode.label, LOCCTR);
 			}
-			if (searchOPTAB(linecode.opcode) == true) //¸ğµç ¸í·É¾î´Â 3byteÀÌ´Ù
+			if (searchOPTAB(linecode.opcode) == true) //ëª¨ë“  ëª…ë ¹ì–´ëŠ” 3byteì´ë‹¤
 				LOCCTR += 3;
 			else if (strcmp(linecode.opcode, "WORD") == 0)
 				LOCCTR += 3;
@@ -187,7 +187,7 @@ void PASS1(FILE* SourceCode) { //pass1
 		if (strcmp(linecode.label, ".") != 0) {
 			if (strcmp(linecode.label, "\t") == 0 && strcmp(linecode.operand, "\t") == 0) {
 				fprintf(intermediate, "%s%s\t%s\t%04X\n", linecode.label, linecode.opcode, linecode.operand, saveLOCCTR);
-				//intermediate file¿¡ ÀÛ¼º
+				//intermediate fileì— ì‘ì„±
 			}
 			else if (strcmp(linecode.label, "\t") != 0) {
 				fprintf(intermediate, "%s\t%s\t%s\t\t%04X\n", linecode.label, linecode.opcode, linecode.operand, saveLOCCTR);
@@ -212,27 +212,7 @@ void PASS1(FILE* SourceCode) { //pass1
 
 }
 
-//int convDec(char *hex) {
-//	int dec = 0;
-//	int pos = 0;
-//
-//	for (int i = strlen(hex) - 1; i >= 0; i--) {
-//		char ch = hex[i];
-//		if (ch >= 48 && ch <= 57) {
-//			dec += (ch - 48)*pow(16, pos);
-//		}
-//		else if (ch >= 65 && ch <= 70) {
-//			dec += (ch - (65 - 10))*pow(16, pos);
-//		}
-//		else if (ch >= 97 && ch <= 102) {
-//			dec += (ch - (97 - 10))*pow(16, pos);
-//		}
-//		pos++;
-//	}
-//	return dec;
-//}
-
-LINE Tokenize(char* read) { //ÀĞ¾îµéÀÎ ÇÑÁÙ¿¡¼­ ºĞÇÒ
+LINE Tokenize(char* read) { //ì½ì–´ë“¤ì¸ í•œì¤„ì—ì„œ ë¶„í• 
 	char *temp;
 	char first[10] = "";
 	char second[10] = "";
@@ -240,10 +220,10 @@ LINE Tokenize(char* read) { //ÀĞ¾îµéÀÎ ÇÑÁÙ¿¡¼­ ºĞÇÒ
 	int i = 0;
 
 	LINE save = { 0 };
-	temp = strtok(read, "\t\n"); //¶ç¾î¾²±â¸¦ ±âÁØÀ¸·Î ³ª´«´Ù
+	temp = strtok(read, "\t\n"); //ë„ì–´ì“°ê¸°ë¥¼ ê¸°ì¤€ìœ¼ë¡œ ë‚˜ëˆˆë‹¤
 	strcpy(first, temp);
-	if (strcmp(first, ".")==0) { //ÁÖ¼®ÀÎÁö ÆÇ´Ü
-		strcpy(save.label, first);	//first¿¡ ´ëÀÔÇÑ´Ù
+	if (strcmp(first, ".")==0) { //ì£¼ì„ì¸ì§€ íŒë‹¨
+		strcpy(save.label, first);	//firstì— ëŒ€ì…í•œë‹¤
 		temp = strtok(NULL, "\n");
 		if (temp != NULL) {
 			strcpy(save.opcode, temp);
@@ -254,12 +234,12 @@ LINE Tokenize(char* read) { //ÀĞ¾îµéÀÎ ÇÑÁÙ¿¡¼­ ºĞÇÒ
 	}
 	else {
 		while (temp != NULL) {
-			if (i == 1) strcpy(second,temp); //µÎ¹øÂ° ÅäÅ«
-			else if (i == 2) strcpy(third, temp); //¼¼¹øÂ° ÅäÅ«
+			if (i == 1) strcpy(second,temp); //ë‘ë²ˆì§¸ í† í°
+			else if (i == 2) strcpy(third, temp); //ì„¸ë²ˆì§¸ í† í°
 			i++;
-			temp = strtok(NULL, " .\t\n"); //±× ´ÙÀ½ ÁÙÀ» ÀÔ·Â ¹Ş´Â´Ù
+			temp = strtok(NULL, " .\t\n"); //ê·¸ ë‹¤ìŒ ì¤„ì„ ì…ë ¥ ë°›ëŠ”ë‹¤
 		}
-		if (i == 1) { //RSUB(Return Subroutine)ÀÇ °æ¿ì
+		if (i == 1) { //RSUB(Return Subroutine)ì˜ ê²½ìš°
 			strcpy(save.label,"\t");
 			strcpy(save.opcode, first);
 			strcpy(save.operand, "\t");
@@ -304,8 +284,8 @@ void InserttoSym(char *label, int LOCCTR) {
 
 bool searchOPTAB(char *opcode) { //search SYMTAB for OPCODE
 	for (int i = 0; i < 100; i++) {
-		if (strcmp(opcode, OP[i].OPCODE) == 0) { //OPCODE°¡ SYTMTAB¿¡ Á¸ÀçÇÑ´Ù
-			OPpos = i; //À§Ä¡¸¦ ³Ñ±ä´Ù
+		if (strcmp(opcode, OP[i].OPCODE) == 0) { //OPCODEê°€ SYTMTABì— ì¡´ì¬í•œë‹¤
+			OPpos = i; //ìœ„ì¹˜ë¥¼ ë„˜ê¸´ë‹¤
 			return true;
 		}
 	}
@@ -329,16 +309,16 @@ void PASS2() {
 	char line[500] = "";
 	int lineopcode;
 
-	if ((obj = fopen("ObjectProgram.txt", "w")) == NULL) { //objectÆÄÀÏÀ» »ı¼º
-		fprintf(stderr, "ObjectProgram.txt ¿À·ù");
+	if ((obj = fopen("ObjectProgram.txt", "w")) == NULL) { //objectíŒŒì¼ì„ ìƒì„±
+		fprintf(stderr, "ObjectProgram.txt ì˜¤ë¥˜");
 		exit(1);
 	}
-	if ((list = fopen("ListingFile.txt", "w")) == NULL) { //listing ÆÄÀÏÀ» »ı¼º
-		fprintf(stderr, "ListingFile.txt ¿À·ù");
+	if ((list = fopen("ListingFile.txt", "w")) == NULL) { //listing íŒŒì¼ì„ ìƒì„±
+		fprintf(stderr, "ListingFile.txt ì˜¤ë¥˜");
 		exit(1);
 	}
-	if ((intermediate = fopen("intermediate.txt", "r")) == NULL) { //intermediateÆÄÀÏÀ» ¿¬´Ù
-		fprintf(stderr, "intermediate.txt ¿À·ù");
+	if ((intermediate = fopen("intermediate.txt", "r")) == NULL) { //intermediateíŒŒì¼ì„ ì—°ë‹¤
+		fprintf(stderr, "intermediate.txt ì˜¤ë¥˜");
 		exit(1);
 	}
 	//begin
@@ -365,17 +345,17 @@ void PASS2() {
 		if (linecode.label[0] != '.') {		//if this is not a comment line then 
 											//begin
 			if (searchOPTAB(linecode.opcode) == true) {		//search OPTAB for OPCODE 
-															//if found then - OPpos¿¡ À§Ä¡ ÀúÀå 
+															//if found then - OPposì— ìœ„ì¹˜ ì €ì¥ 
 															//begin
-				lineopcode = OP[OPpos].OPNUM;		//opcodeÀÇ 10Áø¼ö¸¦ lineopcode¿¡ ÀúÀå
+				lineopcode = OP[OPpos].OPNUM;		//opcodeì˜ 10ì§„ìˆ˜ë¥¼ lineopcodeì— ì €ì¥
 
 				if (linecode.operand[0] != '\0') {	//If there is a symbol in OPERAND field then 
 													//begin
 					if (SearchSymtab(linecode.operand) == true) {	//Search SYMTAB for OPERAND //if found then
 																	//store symbol value as operand address
 						operandAddress = sym[symIndex].address;
-						if (strcmp(linecode.operand, "BUFFER,X") == 0) {	//BUFFER,X´Â 9039°¡ object ÄÚµå¿¡ Ç¥ÇöµÈ´Ù
-							operandAddress = 36921;	//16Áø¼ö º¯È¯½Ã 9039
+						if (strcmp(linecode.operand, "BUFFER,X") == 0) {	//BUFFER,XëŠ” 9039ê°€ object ì½”ë“œì— í‘œí˜„ëœë‹¤
+							operandAddress = 36921;	//16ì§„ìˆ˜ ë³€í™˜ì‹œ 9039
 						}
 					}
 					else {
@@ -390,12 +370,12 @@ void PASS2() {
 				sprintf(sumAddress, "%02X%04X", lineopcode, operandAddress);	//assemble the object code instruction
 			}
 			else if (strcmp(linecode.opcode, "BYTE") == 0) {	//else if OPCODE = 'BYTE' or 'WORD' then 
-																//(assembler directive·Î ¸øÃ£´Â °æ¿ì - µ¥ÀÌÅÍ »ó¼ö)
+																//(assembler directiveë¡œ ëª»ì°¾ëŠ” ê²½ìš° - ë°ì´í„° ìƒìˆ˜)
 				if (strcmp(linecode.operand, "C'EOF'") == 0) {	//convert constant to object code
-					sprintf(sumAddress, "%s", "454F46");		//C'EOF'ÀÇ object code
+					sprintf(sumAddress, "%s", "454F46");		//C'EOF'ì˜ object code
 					sumAddress[6] = NULL;
 				}
-				else if (linecode.operand[0] == 'X') {	//convert constant to object code - X'F1',X'05'ÀÇ °æ¿ì
+				else if (linecode.operand[0] == 'X') {	//convert constant to object code - X'F1',X'05'ì˜ ê²½ìš°
 					sprintf(sumAddress, "%c%c", linecode.operand[2], linecode.operand[3]);
 					sumAddress[2] = NULL;
 				}
@@ -403,11 +383,11 @@ void PASS2() {
 			else if (strcmp(linecode.opcode, "WORD") == 0) {	//else if OPCODE = 'BYTE' or 'WORD' then 
 				if (strcmp(linecode.label, "MAXLEN") == 0) {
 					temp = strtol(linecode.operand, NULL, 16);
-					itoa(temp, WordsAdd, 10);	//10Áø¼ö·Î ¹Ù²ãÁØ´Ù
+					itoa(temp, WordsAdd, 10);	//10ì§„ìˆ˜ë¡œ ë°”ê¿”ì¤€ë‹¤
 					sprintf(sumAddress, "00%s", WordsAdd);	//001000
 				}
 				else {
-					sprintf(sumAddress, "%06s", linecode.operand);	//operand¸¦ ¹Ù·Î ½áÁØ´Ù
+					sprintf(sumAddress, "%06s", linecode.operand);	//operandë¥¼ ë°”ë¡œ ì¨ì¤€ë‹¤
 				}
 			}
 			else if (strcmp(linecode.opcode, "RESW") == 0) {
@@ -416,11 +396,11 @@ void PASS2() {
 			else if (strcmp(linecode.opcode, "RESB") == 0) {
 				sprintf(sumAddress, "%s", "");
 			}
-			if (strcmp(linecode.label, "\t") == 0 && strcmp(linecode.operand, "\t") == 0)//label°ú operand°¡ ¾ø´Â °æ¿ì
+			if (strcmp(linecode.label, "\t") == 0 && strcmp(linecode.operand, "\t") == 0)//labelê³¼ operandê°€ ì—†ëŠ” ê²½ìš°
 			{
 				fprintf(list, "%04X\t\t%s\t%s\t%s\n", linecode.LOCCTR, linecode.opcode, linecode.operand, sumAddress);
 			}
-			else if (strcmp(linecode.label, "\t") == 0)		//label¸¸ ¾ø´Â °æ¿ì
+			else if (strcmp(linecode.label, "\t") == 0)		//labelë§Œ ì—†ëŠ” ê²½ìš°
 			{
 				if (strcmp(linecode.operand, "BUFFER,X") == 0)
 					fprintf(list, "%04X\t\t%s\t%s\t%s\n", linecode.LOCCTR, linecode.opcode, linecode.operand, sumAddress);
@@ -431,7 +411,7 @@ void PASS2() {
 				fprintf(list, "%04X\t%s\t%s\t%s\t\t%s\n", linecode.LOCCTR, linecode.label, linecode.opcode, linecode.operand, sumAddress);
 			}
 
-			strcat(ObjectLine, sumAddress);	//Object Program¿¡ ÇÑÁÙÀÇ objectÄÚµå¸¦ ³Ö±â À§ÇØ objectLineÀÌ¶ó´Â ¹®ÀÚ¿­ ÀúÀå º¯¼ö¿¡ sumAddress¸¦ °è¼Ó ÀÌ¾îºÙ¿©ÁØ´Ù.
+			strcat(ObjectLine, sumAddress);	//Object Programì— í•œì¤„ì˜ objectì½”ë“œë¥¼ ë„£ê¸° ìœ„í•´ objectLineì´ë¼ëŠ” ë¬¸ìì—´ ì €ì¥ ë³€ìˆ˜ì— sumAddressë¥¼ ê³„ì† ì´ì–´ë¶™ì—¬ì¤€ë‹¤.
 			Objnum += strlen(sumAddress);
 
 			if (strcmp(linecode.opcode, "RESB") == 0) {
@@ -467,7 +447,7 @@ void PASS2() {
 
 }
 
-LINE Tokenize_again(char *read) { //ÀÔ·Â ¹ŞÀº ÁÙÀ» »óÈ²¿¡ ¸Â°Ô 4°³·Î ³ª´®
+LINE Tokenize_again(char *read) { //ì…ë ¥ ë°›ì€ ì¤„ì„ ìƒí™©ì— ë§ê²Œ 4ê°œë¡œ ë‚˜ëˆ”
 	char *temp;
 	char first[10] = "";
 	char second[10] = "";
@@ -478,7 +458,7 @@ LINE Tokenize_again(char *read) { //ÀÔ·Â ¹ŞÀº ÁÙÀ» »óÈ²¿¡ ¸Â°Ô 4°³·Î ³ª´®
 	LINE saveline = { 0 };
 	temp = strtok(read, "\t\n");
 	strcpy(first, temp);
-	if (strcmp(first, ".") == 0) { //ÁÖ¼®ÀÏ °æ¿ì
+	if (strcmp(first, ".") == 0) { //ì£¼ì„ì¼ ê²½ìš°
 		strcpy(saveline.label, first);
 		temp = strtok(NULL, "\n");
 		if (temp != NULL) {
@@ -488,14 +468,14 @@ LINE Tokenize_again(char *read) { //ÀÔ·Â ¹ŞÀº ÁÙÀ» »óÈ²¿¡ ¸Â°Ô 4°³·Î ³ª´®
 		printf("%s", saveline.opcode);
 		return saveline;
 	}
-	else { //ÁÖ¼®ÀÌ ¾Æ´Ò °æ¿ì
+	else { //ì£¼ì„ì´ ì•„ë‹ ê²½ìš°
 		while (temp != NULL) {
 			if (i == 1) strcpy(second, temp);
 			else if (i == 2) strcpy(third, temp);
 			else if (i == 3) strcpy(fourth, temp);
 			i++;
 			temp = strtok(NULL, " .\t\n");
-		} //ÅäÅ«ÀÇ °³¼ö¿¡ µû¶ó ³ª´«´Ù
+		} //í† í°ì˜ ê°œìˆ˜ì— ë”°ë¼ ë‚˜ëˆˆë‹¤
 		if (strcmp(first, "END") == 0) {
 			strcpy(saveline.opcode, first);
 			strcpy(saveline.operand, second);
